@@ -3,5 +3,7 @@
 /home/taran/Downloads/Shopping_Cart/src/main/java/com/ecom/Shopping_Cart/controller/HomeController.java
 /home/taran/Downloads/Shopping_Cart/src/main/java/com/ecom/Shopping_Cart/model/Category.java
 /home/taran/Downloads/Shopping_Cart/src/main/java/com/ecom/Shopping_Cart/repository/CategoryRepository.java
-/home/taran/Downloads/Shopping_Cart/src/main/java/com/ecom/Shopping_Cart/service/CategoryService.java
-/home/taran/Downloads/Shopping_Cart/src/main/java/com/ecom/Shopping_Cart/service/impl/CategoryServiceImpl.java
+/home/taran/Downloads/Shopping_Cart/src/main/java/com/ecom/Shopping_Cart/services/CategoryService.java
+/home/taran/Downloads/Shopping_Cart/src/main/java/com/ecom/Shopping_Cart/services/CommonService.java
+/home/taran/Downloads/Shopping_Cart/src/main/java/com/ecom/Shopping_Cart/services/CommonServiceImpl.java
+/home/taran/Downloads/Shopping_Cart/src/main/java/com/ecom/Shopping_Cart/services/impl/CategoryServiceImpl.java

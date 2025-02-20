@@ -11,19 +11,50 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="card card-sh">
-                    <div class="card-header text-center fs-4">Add Category</div>
+                    <div class="card-header text-center ">
+                        <p class="fs-4">Add Category</p>
+                        <th:block th:if="${session.succMsg}">
+                            <p class="text-success fw-bold">[[${session.succMsg}]]</p>
+                            <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
+
+                        <th:block th:if="${session.errorMsg}">
+                            <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+                            <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
+
+                    </div>
                     <div class="card-body">
-                        <form>
+                        <form action="/admin/saveCategory" method="post"
+                              enctype="multipart/form-data">
                             <div class="mb-3">
-                                <label>Enter Category</label> <input type="text"
+                                <label>Enter Category</label> <input type="text" name="name"
                                                                      class="form-control">
                             </div>
 
                             <div class="mb-3">
-                                <label>Upload Image</label> <input type="file"
-                                                                   class="form-control">
+                                <label>Status</label>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" checked
+                                           value="true" name="isActive" id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Active </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="isActive"
+                                           value="false" id="flexRadioDefault2"> <label
+                                        class="form-check-label" for="flexRadioDefault2">
+                                    Inactive </label>
+                                </div>
+
                             </div>
 
+                            <div class="mb-3">
+                                <label>Upload Image</label> <input type="file" name="file"
+                                                                   class="form-control">
+                            </div>
+                            <button class="btn btn-primary col-md-12 mt-2">Save</button>
                         </form>
                     </div>
                 </div>
@@ -38,16 +69,21 @@
                             <tr>
                                 <th scope="col">Sl No</th>
                                 <th scope="col">Category</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
+                            <tr th:each="cat,c:${categorys}">
+                                <th scope="row">[[${c.count}]]</th>
+                                <td>[[${cat.name}]]</td>
+                                <td>[[${cat.isActive}]]</td>
+                                <td><img th:src="@{'/img/category_img/'+${cat.imageName}}" width="50px" height="50px"></td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-sm"><i class="fa-solid fa-pen-to-square fa-1x"></i>Edit</a>
+                                    <a th:href="@{'/admin/deleteCategory/' + ${cat.id}}" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash fa-1x"></i>Delete</a>
+                                </td>
                             </tr>
 
                             </tbody>
