@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Entity
@@ -32,4 +31,8 @@ public class Product {
     private int stock;
 
     private String image;
+
+    private int discount;
+
+    private Double discountPrice;
 }
