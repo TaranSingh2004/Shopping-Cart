@@ -65,27 +65,32 @@ public class AdminController {
         if (existCategory) {
             session.setAttribute("errorMsg", "Category Name already exists");
         } else {
-
             Category saveCategory = categoryService.saveCategory(category);
 
             if (ObjectUtils.isEmpty(saveCategory)) {
-                session.setAttribute("errorMsg", "Not saved ! internal server error");
+                session.setAttribute("errorMsg", "Not saved! Internal server error");
             } else {
+                // Use absolute path for saving files in development
+                String uploadDir = "src/main/resources/static/img/category_img/";
 
-                File saveFile = new ClassPathResource("static/img").getFile();
+                // Ensure the directory exists
+                File directory = new File(uploadDir);
+                if (!directory.exists()) {
+                    directory.mkdirs();  // Create the folder if it doesn't exist
+                }
 
-                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "category_img" + File.separator
-                        + file.getOriginalFilename());
-
-                System.out.println(path);
+                // Save the file in the correct location
+                Path path = Paths.get(uploadDir + File.separator + imageName);
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
+                System.out.println("File saved at: " + path.toString());
                 session.setAttribute("succMsg", "Saved successfully");
             }
         }
 
         return "redirect:/admin/category";
     }
+
 
     @GetMapping("/deleteCategory/{id}")
     public String deleteCategory(@PathVariable int id, HttpSession session){
