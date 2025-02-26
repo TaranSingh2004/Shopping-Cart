@@ -26,4 +26,10 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodePassword);
         return userRepository.save(user);
     }
+
+    @Override
+    public UserDtls getUserByEmail(String email) {
+
+        return userRepository.findByEmail(email);
+    }
 }
