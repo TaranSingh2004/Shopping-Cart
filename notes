@@ -6,3 +6,18 @@ spring security implementation
 4. create userDetialServiceImpl and implement UserDetailsService
 5. create security config
 6. create AuthSuccessHandler
+
+
+
+
+wrong password functionality key points::::::
+
+increaseFailedAttempt(user);
+userService.Lock(user);
+userService.unlockAccountTimeExpired(user);
+public void resetAttempt(int userId);
+
+
+accountNonLocked
+failedAttempt
+lockTime
