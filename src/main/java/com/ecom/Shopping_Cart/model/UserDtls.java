@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.util.Date;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,4 +40,12 @@ public class UserDtls {
     private String role;
 
     private Boolean isEnable;
+
+    private Boolean accountNonLocked;
+
+    private Integer failedAttempt;
+
+    private Date lockTime;
+
+    private String resetToken;
 }
