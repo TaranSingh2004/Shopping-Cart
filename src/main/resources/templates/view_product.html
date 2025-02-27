@@ -57,7 +57,9 @@
                             </div>
                         </div>
                         <th:block th:if="${product.stock>0}">
-                            <a href="login.jsp" class="btn btn-danger col-md-12">Add To Cart</a>
+                            <th:block th:if="${user==null}">
+                                <a href="/signin" class="btn btn-danger col-md-12">Add To Cart</a>
+                            </th:block>
                         </th:block>
                         <th:block th:unless="${product.stock>0}">
                             <a href="#" class="btn text-white btn-warning col-md-12">Out of Stock</a>
