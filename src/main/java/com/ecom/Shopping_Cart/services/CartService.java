@@ -11,4 +11,7 @@ public interface CartService {
     public List<Cart> getCartByUser(Integer userId);
 
     public Integer getCountCart(Integer userId);
+
+    public void updateQuantity(String sy, Integer cid);
+
 }
