@@ -11,8 +11,7 @@ import java.util.List;
 
 import com.ecom.Shopping_Cart.model.Product;
 import com.ecom.Shopping_Cart.model.UserDtls;
-import com.ecom.Shopping_Cart.services.ProductService;
-import com.ecom.Shopping_Cart.services.UserService;
+import com.ecom.Shopping_Cart.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.core.io.ClassPathResource;
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecom.Shopping_Cart.model.Category;
-import com.ecom.Shopping_Cart.services.CategoryService;
-import com.ecom.Shopping_Cart.services.CommonService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -41,13 +38,18 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CartService cartService;
+
 
     @ModelAttribute
     public void getUserDetails(Principal p, Model m){
         if(p!=null){
             String email= p.getName();
-            UserDtls user = userService.getUserByEmail(email);
-            m.addAttribute("user", user);
+            UserDtls userDtls = userService.getUserByEmail(email);
+            m.addAttribute("user", userDtls);
+            Integer countCart = cartService.getCountCart(userDtls.getId());
+            m.addAttribute("countCart", countCart);
         }
         List<Category> list = categoryService.getAllActiveCategory();
         m.addAttribute("categorys", list);
