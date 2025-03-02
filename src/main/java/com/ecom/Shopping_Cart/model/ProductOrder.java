@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -22,7 +23,7 @@ public class ProductOrder {
 
     private String orderId;
 
-    private Date orderDate;
+    private LocalDate orderDate;
 
     @ManyToOne
     private Product product;
