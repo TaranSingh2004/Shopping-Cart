@@ -10,8 +10,10 @@ import java.security.Principal;
 import java.util.List;
 
 import com.ecom.Shopping_Cart.model.Product;
+import com.ecom.Shopping_Cart.model.ProductOrder;
 import com.ecom.Shopping_Cart.model.UserDtls;
 import com.ecom.Shopping_Cart.services.*;
+import com.ecom.Shopping_Cart.util.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.core.io.ClassPathResource;
@@ -40,6 +42,9 @@ public class AdminController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private OrderService orderService;
 
 
     @ModelAttribute
@@ -251,6 +256,33 @@ public class AdminController {
             session.setAttribute("errorMsg", "Something wrong on server");
         }
         return "redirect:/admin/users";
+    }
+
+    @GetMapping("/orders")
+    public String getAllOrders(Model m){
+        List<ProductOrder> allOrders = orderService.getAllOrders();
+        m.addAttribute("orders", allOrders);
+        return "/admin/orders";
+    }
+
+    @PostMapping("/update-order-status")
+    private String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session){
+        OrderStatus[] values = OrderStatus.values();
+        String status = null;
+        for(OrderStatus orderSt:values){
+            if(orderSt.getId().equals(st)){
+                status=orderSt.getName();
+            }
+
+        }
+        Boolean updateOrder = orderService.updateOrderStatus(id, status);
+
+        if(updateOrder){
+            session.setAttribute("succMsg", "Status Updated");
+        } else {
+            session.setAttribute("errorMsg", "Status not updated");
+        }
+        return "redirect:/admin/orders";
     }
 
 }
