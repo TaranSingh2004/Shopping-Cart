@@ -2,9 +2,9 @@ package com.ecom.Shopping_Cart.util;
 
 public enum OrderStatus {
     IN_PROGRESS(1, "In Progress"),
-    ORDER_RECIEVED(2, "order recieved"),
+    ORDER_RECIEVED(2, "Order recieved"),
     PRODUCT_PACKED(3, "Product Packed"),
-    OUT_FOR_DELIVERY(4, "Out for delivery"),
+    OUT_FOR_DELIVERY(4, "Out for Delivery"),
     DELIVERED(5, "Delivered"),
     CANCEL(6, "Cancelled");
 
