@@ -2,6 +2,7 @@ package com.ecom.Shopping_Cart.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,7 +14,9 @@ import com.ecom.Shopping_Cart.model.Product;
 import com.ecom.Shopping_Cart.model.ProductOrder;
 import com.ecom.Shopping_Cart.model.UserDtls;
 import com.ecom.Shopping_Cart.services.*;
+import com.ecom.Shopping_Cart.util.CommonUtil;
 import com.ecom.Shopping_Cart.util.OrderStatus;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.core.io.ClassPathResource;
@@ -46,6 +49,8 @@ public class AdminController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private CommonUtil commonUtil;
 
     @ModelAttribute
     public void getUserDetails(Principal p, Model m){
@@ -266,7 +271,7 @@ public class AdminController {
     }
 
     @PostMapping("/update-order-status")
-    private String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session){
+    private String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session) throws MessagingException, UnsupportedEncodingException {
         OrderStatus[] values = OrderStatus.values();
         String status = null;
         for(OrderStatus orderSt:values){
@@ -275,9 +280,11 @@ public class AdminController {
             }
 
         }
-        Boolean updateOrder = orderService.updateOrderStatus(id, status);
+        ProductOrder updateOrder = orderService.updateOrderStatus(id, status);
 
-        if(updateOrder){
+        commonUtil.sendMailForProductOrder(updateOrder, status);
+
+        if(!ObjectUtils.isEmpty(updateOrder)){
             session.setAttribute("succMsg", "Status Updated");
         } else {
             session.setAttribute("errorMsg", "Status not updated");

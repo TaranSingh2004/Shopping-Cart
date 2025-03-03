@@ -5,7 +5,9 @@ import com.ecom.Shopping_Cart.services.CartService;
 import com.ecom.Shopping_Cart.services.CategoryService;
 import com.ecom.Shopping_Cart.services.OrderService;
 import com.ecom.Shopping_Cart.services.UserService;
+import com.ecom.Shopping_Cart.util.CommonUtil;
 import com.ecom.Shopping_Cart.util.OrderStatus;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.List;
 
@@ -32,6 +35,9 @@ public class UserController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private CommonUtil commonUtil;
 
     @GetMapping("/")
     public String home() {
@@ -100,7 +106,7 @@ public class UserController {
     }
 
     @PostMapping("/save-order")
-    public String saveOrder(@ModelAttribute OrderRequest request, Principal p){
+    public String saveOrder(@ModelAttribute OrderRequest request, Principal p) throws MessagingException, UnsupportedEncodingException {
 //        System.out.println(request);
         UserDtls user = getLoggedInUserDetails(p);
         orderService.saveOrder(user.getId(), request);
@@ -122,7 +128,7 @@ public class UserController {
     }
 
     @GetMapping("/update-status")
-    private String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session){
+    private String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session) throws MessagingException, UnsupportedEncodingException {
         OrderStatus[] values = OrderStatus.values();
         String status = null;
         for(OrderStatus orderSt:values){
@@ -131,9 +137,11 @@ public class UserController {
             }
 
         }
-        Boolean updateOrder = orderService.updateOrderStatus(id, status);
+        ProductOrder updateOrder = orderService.updateOrderStatus(id, status);
 
-        if(updateOrder){
+        commonUtil.sendMailForProductOrder(updateOrder, status);
+
+        if(!ObjectUtils.isEmpty(updateOrder)){
             session.setAttribute("succMsg", "Status Updated");
         } else {
             session.setAttribute("errorMsg", "Status not updated");
