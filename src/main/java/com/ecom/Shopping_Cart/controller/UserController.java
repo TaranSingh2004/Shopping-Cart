@@ -8,6 +8,7 @@ import com.ecom.Shopping_Cart.services.UserService;
 import com.ecom.Shopping_Cart.util.CommonUtil;
 import com.ecom.Shopping_Cart.util.OrderStatus;
 import jakarta.mail.MessagingException;
+import jakarta.mail.Multipart;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
@@ -15,8 +16,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.management.MemoryUsage;
 import java.security.Principal;
 import java.util.List;
 
@@ -149,4 +153,19 @@ public class UserController {
         return "redirect:/user/user-orders";
     }
 
+    @GetMapping("/profile")
+    public String profile(){
+        return "/user/profile";
+    }
+
+    @PostMapping("/update-profile")
+    public String updateProfile(@ModelAttribute UserDtls user, @RequestParam MultipartFile img, HttpSession session) throws IOException {
+        UserDtls updateUserDetails = userService.updateUserProfile(user, img);
+        if(!ObjectUtils.isEmpty(updateUserDetails)){
+            session.setAttribute("succMsg", "Profile updated successfully");
+        } else {
+            session.setAttribute("errorMsg", "Profile not updated");
+        }
+        return "redirect:/user/profile";
+    }
 }
