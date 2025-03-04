@@ -7,24 +7,38 @@
 </head>
 <body>
     <section>
-        <div class="container-fluid mt-5 p-5">
+        <div class="container-fluid mt-1 p-5">
+            <div class="row">
+                <p class="text-center fs-3 mt-2">All Products</p>
+                <hr>
+                <a href="/admin/" class="text-decoration-none"><i class="fa-solid fa-arrow-left"></i> Back</a>
+                <th:block th:if="${session.succMsg}">
+                    <p class="text-success fw-bold text-center">[[${session.succMsg}]]</p>
+                    <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+
+                <th:block th:if="${session.errorMsg}">
+                    <p class="text-danger fw-bold text-center">[[${session.errorMsg}]]</p>
+                    <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+                <div class="col-md-4 p-3">
+                    <form action="/admin/products" method="get">
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" class="form-control col" name="ch">
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-primary col">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             <div class="card card-sh">
-                <div class="card-header text-center">
-                    <p class="fs-4">View products</p>
-                    <th:block th:if="${session.succMsg}">
-                        <p class="text-success fw-bold">[[${session.succMsg}]]</p>
-                        <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-                    </th:block>
-
-                    <th:block th:if="${session.errorMsg}">
-                        <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-                        <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-                    </th:block>
-                </div>
                 <div class="card-body">
-                    <table class="table">
-                        <thead>
+                    <table class="table table-bordered">
+                        <thead class="table-light">
                         <tr>
                             <th scope="col">Si no</th>
                             <th scope="col">Image</th>
