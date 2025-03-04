@@ -6,11 +6,20 @@ import com.ecom.Shopping_Cart.services.UserService;
 import com.ecom.Shopping_Cart.util.AppConstant;
 import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.text.html.Option;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -118,5 +127,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDtls updateUser(UserDtls user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public UserDtls updateUserProfile(UserDtls user, MultipartFile img) throws IOException {
+        UserDtls dbUser = userRepository.findById(user.getId()).get();
+
+        if(!img.isEmpty()){
+            dbUser.setProfileImage(img.getOriginalFilename());
+        }
+
+        if(!ObjectUtils.isEmpty(dbUser)){
+            dbUser.setName(user.getName());
+            dbUser.setMobileNumber(user.getMobileNumber());
+            dbUser.setAddress(user.getAddress());
+            dbUser.setCity(user.getCity());
+            dbUser.setState(user.getState());
+            dbUser.setPincode(user.getPincode());
+            dbUser = userRepository.save(dbUser);
+        }
+        if (!img.isEmpty()) {
+            File saveFile = new ClassPathResource("static/img").getFile();
+            File directory = new File(saveFile.getAbsolutePath() + File.separator + "profile_img");
+            if(!directory.exists()){
+                directory.mkdir();
+            }
+            Path path = Paths.get(directory.getAbsolutePath() + File.separator + img.getOriginalFilename());
+//                 System.out.println(path);
+            Files.copy(img.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        }
+        return dbUser;
     }
 }
