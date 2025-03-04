@@ -1,9 +1,6 @@
 package com.ecom.Shopping_Cart.services.impl;
 
-import com.ecom.Shopping_Cart.model.Cart;
-import com.ecom.Shopping_Cart.model.OrderAddress;
-import com.ecom.Shopping_Cart.model.OrderRequest;
-import com.ecom.Shopping_Cart.model.ProductOrder;
+import com.ecom.Shopping_Cart.model.*;
 import com.ecom.Shopping_Cart.repository.CartRepository;
 import com.ecom.Shopping_Cart.repository.ProductOrderRepository;
 import com.ecom.Shopping_Cart.services.OrderService;
@@ -88,5 +85,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<ProductOrder> getAllOrders() {
         return orderRepository.findAll();
+    }
+
+    @Override
+    public ProductOrder getOrdersByOrderId(String orderId) {
+        return orderRepository.findByOrderId(orderId);
     }
 }
