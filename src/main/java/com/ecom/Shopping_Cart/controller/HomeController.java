@@ -32,8 +32,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -70,7 +72,15 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String index(){
+    public String index(Model m){
+        List<Category> categories = categoryService.getAllActiveCategory().stream().
+                sorted(Comparator.comparing(Category::getId).reversed()).
+                limit(6).toList();
+        List<Product> products =  productService.getAllActiveProducts("").stream().
+                sorted(Comparator.comparing(Product::getId).reversed()).
+                limit(8).toList();
+        m.addAttribute("category", categories);
+        m.addAttribute("products", products);
         return "index";
     }
 
