@@ -7,6 +7,9 @@ import com.ecom.Shopping_Cart.util.AppConstant;
 import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,6 +58,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDtls> getUsers(String role) {
         return userRepository.findByRole(role);
+    }
+
+    @Override
+    public Page<UserDtls> getUsers(String role, Integer pageNo, Integer pageSize) {
+        Pageable pageable1 = PageRequest.of(pageNo, pageSize);
+        return userRepository.findByRole(role, pageable1);
     }
 
     @Override
