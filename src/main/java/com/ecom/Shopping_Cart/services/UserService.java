@@ -35,4 +35,6 @@ public interface UserService {
     public UserDtls updateUserProfile(UserDtls user, MultipartFile img) throws IOException;
 
     public Page<UserDtls> getUsers(String role, Integer pageNo, Integer pageSize);
+
+    public UserDtls saveAdmin(UserDtls user);
 }

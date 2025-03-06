@@ -13,7 +13,8 @@
 
         <div class="card card-sh">
             <div class="card-header text-center">
-                <p class="fs-4">Users</p>
+                <p th:if="${userType==1}" class="fs-4">Users</p>
+                <p th:if="${userType==2}" class="fs-4">Admin</p>
                 <th:block th:if="${session.succMsg}">
                     <p class="text-success fw-bold">[[${session.succMsg}]]</p>
                     <th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
@@ -48,8 +49,8 @@
                         <td>[[${u.address+','+u.city+','+u.city+','+u.pincode}]]</td>
                         <td>[[${u.isEnable}]]</td>
                         <td>
-                            <a th:href="@{'/admin/updateSts?status=true&id='+${u.id}}" class="btn btn-sm btn-primary">Active</a>
-                            <a th:href="@{'/admin/updateSts?status=false&id='+${u.id}}" class="btn btn-sm btn-danger">Inactive</a>
+                            <a th:href="@{'/admin/updateSts?status=true&id='+${u.id}}+'&type='+${userType}" class="btn btn-sm btn-primary">Active</a>
+                            <a th:href="@{'/admin/updateSts?status=false&id='+${u.id}}+'&type='+${userType}" class="btn btn-sm btn-danger">Inactive</a>
                         </td>
 
                     </tr>
@@ -62,14 +63,14 @@
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <li class="page-item" th:classappend="${isFirst}?'disabled':''">
-                                    <a class="page-link" th:href="@{'/admin/users?pageNo='+${pageNo-1}}" aria-label="Previous">
+                                    <a class="page-link" th:href="@{'/admin/users?type='+${userType}+'&pageNo='+${pageNo-1}}" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                         <span class="sr-only">Previous</span>
                                     </a>
                                 </li>
-                                <li th:each="i:${#numbers.sequence(1, totalPages)}" class="page-item" th:classappend="${pageNo+1==i}?'active':''"><a class="page-link" th:href="@{'/admin/users?pageNo='+${i-1}}">[[${i}]]</a></li>
+                                <li th:each="i:${#numbers.sequence(1, totalPages)}" class="page-item" th:classappend="${pageNo+1==i}?'active':''"><a class="page-link" th:href="@{'/admin/users?type='+${userType}+'&pageNo='+${i-1}}">[[${i}]]</a></li>
                                 <li class="page-item" th:classappend="${isLast}?'disabled':''">
-                                    <a class="page-link" th:href="@{'/admin/users?pageNo='+${pageNo+1}}" aria-label="Next">
+                                    <a class="page-link" th:href="@{'/admin/users?type='+${userType}+'&pageNo='+${pageNo+1}}" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                         <span class="sr-only">Next</span>
                                     </a>
