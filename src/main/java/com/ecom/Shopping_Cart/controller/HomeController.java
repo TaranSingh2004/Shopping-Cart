@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -86,13 +87,22 @@ public class HomeController {
     @GetMapping("/products")
     public String products(Model m, @RequestParam(value = "category", defaultValue = "") String category,
                            @RequestParam(name="pageNo", defaultValue = "0" ) Integer pageNo,
-                           @RequestParam(name="pageSize", defaultValue = "9") Integer pageSize){
+                           @RequestParam(name="pageSize", defaultValue = "9") Integer pageSize,
+                           @RequestParam(defaultValue = "") String ch){
         List<Category> categories = categoryService.getAllActiveCategory();
         m.addAttribute("paramValue", category);
         m.addAttribute("categories", categories);
 //        List<Product> products = productService.getAllActiveProducts(category);
 //        m.addAttribute("products", products);
-        Page<Product> page = productService.getAllActiveProductPagination(pageNo, pageSize,category);
+        Page<Product> page=null;
+
+        if(StringUtils.isEmpty(ch)){
+            page = productService.getAllActiveProductPagination(pageNo, pageSize,category);
+        } else {
+            page = productService.searchActiveProductPagination(pageNo, pageSize, category, ch);
+        }
+
+
         List<Product> products = page.getContent();
         m.addAttribute("products", products);
         m.addAttribute("productsSize", products.size());

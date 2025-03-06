@@ -124,12 +124,27 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll(pageable);
     }
 
+    @Override
+    public Page<Product> searchActiveProductPagination(Integer pageNo, Integer pageSize, String category, String ch) {
+        Page<Product> pageProduct=null;
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        pageProduct=productRepository.findByIsActiveTrueAndTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(ch, ch, pageable);
+
+//        if(ObjectUtils.isEmpty(category)){
+//            pageProduct=productRepository.findByIsActiveTrue(pageable);
+//        } else {
+//            pageProduct=productRepository.findByCategory(pageable, category);
+//        }
+        return pageProduct;
+    }
+
 
     @Override
     public Page<Product> getAllActiveProductPagination(Integer pageNo, Integer pageSize, String category) {
 
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Product> pageProduct=null;
+
         if(ObjectUtils.isEmpty(category)){
             pageProduct=productRepository.findByIsActiveTrue(pageable);
         } else {
