@@ -1,6 +1,8 @@
 package com.ecom.Shopping_Cart.services;
 
 import com.ecom.Shopping_Cart.model.UserDtls;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,4 +33,6 @@ public interface UserService {
     public UserDtls updateUser(UserDtls user);
 
     public UserDtls updateUserProfile(UserDtls user, MultipartFile img) throws IOException;
+
+    public Page<UserDtls> getUsers(String role, Integer pageNo, Integer pageSize);
 }
