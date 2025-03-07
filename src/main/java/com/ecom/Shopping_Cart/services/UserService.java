@@ -37,4 +37,6 @@ public interface UserService {
     public Page<UserDtls> getUsers(String role, Integer pageNo, Integer pageSize);
 
     public UserDtls saveAdmin(UserDtls user);
+
+    public Boolean existsEmail(String email);
 }
